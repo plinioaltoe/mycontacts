@@ -1,0 +1,19 @@
+{
+  "name": "mycontacts",
+  "version": "1.0.0",
+  "description": "My contacts with mongodb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plinioaltoe/mycontacts.git"
+  },
+  "author": "Plinio Altoe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/plinioaltoe/mycontacts/issues"
+  },
+  "homepage": "https://github.com/plinioaltoe/mycontacts#readme"
+}
