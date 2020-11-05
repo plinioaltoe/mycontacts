@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/plinioaltoe/mycontacts/issues"
   },
-  "homepage": "https://github.com/plinioaltoe/mycontacts#readme"
+  "homepage": "https://github.com/plinioaltoe/mycontacts#readme",
+  "dependencies": {
+    "inquirer": "^7.3.3",
+    "mongodb": "^3.6.2"
+  }
 }
