@@ -15,6 +15,47 @@ const listar = async () => {
   options()
 }
 
+const criar = () => {
+  inquirer.prompt(
+    [
+      {
+        type: "input",
+        name: "name",
+        message: "Digite o nome da collection",
+      }
+    ]
+  ).then(async function (answers) {
+    await database.createCollection(answers.name)
+    console.log("Collection criada!")
+    listar()
+  }
+  ).catch((errors) => {
+    console.log(`Deu errado algo com ${errors}`)
+  })
+}
+
+const apagar = () => {
+  inquirer.prompt(
+    [
+      {
+        type: "input",
+        name: "name",
+        message: "Digite o nome da collection",
+      }
+    ]
+  ).then(async function (answers) {
+    const apagou = await database.dropCollection(answers.name)
+    if (apagou) {
+      console.log("Collection apagada!")
+    }
+    listar()
+  }
+  ).catch((errors) => {
+    console.log(`Deu errado algo, verifique se a collection existe.`, errors)
+  })
+}
+
+
 function options() {
   inquirer.prompt(
     [
@@ -31,17 +72,17 @@ function options() {
         listar()
         break;
       case "Criar":
-        // criar()
+        criar()
         break;
       case "Apagar":
-        // apagar()
+        apagar()
         break;
       default:
         options()
         break;
     }
   }).catch((errors) => {
-    console.log(`Deu errado algo com ${errors}`)
+    console.log(`Deu errado algo`)
   })
 }
 
