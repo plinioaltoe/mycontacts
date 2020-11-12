@@ -82,7 +82,7 @@ function options() {
         break;
     }
   }).catch((errors) => {
-    console.log(`Deu errado algo`)
+    console.log(`Deu errado algo aqui`)
   })
 }
 
