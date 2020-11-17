@@ -1,7 +1,6 @@
 const inquirer = require('inquirer')
 const { MongoClient } = require('mongodb')
 const URL = "mongodb://localhost:27017/mycontacts"
-const contatos = require('./contacts')
 
 const client = new MongoClient(URL, { useUnifiedTopology: true })
 
@@ -16,50 +15,48 @@ const listar = async (col) => {
   }
 }
 
-const criar = (col) => {
+const buscarPorNome = (col) => {
   inquirer.prompt(
     [
       {
         type: "input",
         name: "name",
-        message: "Digite o nome do contato",
-      },
-      {
-        type: "input",
-        name: "tel",
-        message: "Digite o telefone do contato",
-      },
-      {
-        type: "input",
-        name: "address",
-        message: "Digite o endereço do contato",
-      },
+        message: "Digite o nome do contato para pesquisar",
+      }
     ]
-  ).then(async function (answers) {
-    await database.collection(col).insertOne(answers)
-    console.log("Contato criado!")
-    listar(col)
+  ).then(async function ({ name }) {
+    const documents = await database.collection(col).find({
+      name: { '$regex': name }
+    }).toArray()
+    console.table(documents)
+    options()
   }
   ).catch((errors) => {
     console.log(`Deu errado algo com ${errors}`)
   })
 }
 
-const apagar = (col) => {
+const buscarPorTelEEndereco = (col) => {
   inquirer.prompt(
     [
       {
         type: "input",
-        name: "name",
-        message: "Digite o nome do contato",
+        name: "tel",
+        message: "Digite o telefone",
+      },
+      {
+        type: "input",
+        name: "address",
+        message: "Digite o endereço",
       }
     ]
-  ).then(async function (answer) {
-    const apagou = await database.collection(col).deleteOne(answer)
-    if (apagou) {
-      console.log("Contato apagado!")
-    }
-    listar(col)
+  ).then(async function ({ tel, address }) {
+    const documents = await database.collection(col).find({
+      tel: { '$regex': tel },
+      address: { '$regex': address }
+    }).toArray()
+    console.table(documents)
+    options()
   }
   ).catch((errors) => {
     console.log(`Deu errado algo, verifique se a collection existe.`, errors)
@@ -81,19 +78,19 @@ async function options() {
         type: "rawlist",
         name: "option",
         message: "Escolha sua opção",
-        choices: ["Listar", "Criar", "Apagar"]
+        choices: ["Listar tudo", "Buscar por nome", "Buscar por tel e Endereco"]
       },
     ]
-  ).then(function ({ option, folder }) {
+  ).then(({ option, folder }) => {
     switch (option) {
-      case "Listar":
+      case "Listar tudo":
         listar(folder)
         break;
-      case "Criar":
-        criar(folder)
+      case "Buscar por nome":
+        buscarPorNome(folder)
         break;
-      case "Apagar":
-        apagar(folder)
+      case "Buscar por tel e Endereco":
+        buscarPorTelEEndereco(folder)
         break;
       default:
         options()
