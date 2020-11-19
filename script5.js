@@ -20,11 +20,11 @@ const contactsOfAge = async (col) => {
   ).then(async function ({ age }) {
     const documents = await database.collection(col).aggregate([
       {
-        $match: { idade: age }
+        $match: { age }
       },
       {
         $group: {
-          _id: "$idade",
+          _id: "$age",
           total: { $sum: 1 },
           names: { $push: "$name" }
         },
@@ -47,7 +47,7 @@ const countByAge = async (col) => {
   const documents = await database.collection(col).aggregate([
     {
       $group: {
-        _id: "$idade",
+        _id: "$age",
         total: { $sum: 1 },
         names: { $push: "$name" }
       },
